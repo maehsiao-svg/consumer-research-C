@@ -7,9 +7,9 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap');
 :root {
-  --c1:#266E97;--c2:#6FBCD2;--c3:#EE6345;--c4:#5E6D9B;--c5:#83DDC6;
-  --c1-light:#D6EAF2;--c2-light:#DFF2F8;--c3-light:#FDDDD6;--c4-light:#E0E3EE;--c5-light:#D9F5ED;
-  --c1-pale:#EBF4F9;--c3-pale:#FEF0EC;--c5-pale:#EDF9F5;
+  --c1:#266E97;--c2:#6FBCD2;--c3:#7C4DA0;--c4:#5E6D9B;--c5:#B891D9;
+  --c1-light:#D6EAF2;--c2-light:#DFF2F8;--c3-light:#E5DAF0;--c4-light:#E0E3EE;--c5-light:#EFE0F5;
+  --c1-pale:#EBF4F9;--c3-pale:#F3EBF8;--c5-pale:#F8F0FB;
   --cover:#266E97;--cover-alt:#1B5675;
   --gray-50:#fafafa;--gray-100:#f0f0f2;--gray-200:#d8d8dc;--gray-300:#bbbbc2;--gray-400:#7A7A85;--gray-500:#555560;--gray-600:#3D3D47;--gray-700:#2A2A33;--gray-800:#1A1A22;
   --bg:#EBF4F9;
@@ -26,14 +26,17 @@ body{font-family:'Noto Sans TC','Outfit',sans-serif;background:var(--bg);min-hei
 .card-title{font-size:20px;font-weight:700;color:var(--cover);margin-bottom:16px;display:flex;align-items:center;gap:10px}
 .card-title .icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .icon-purple{background:var(--c4-light);color:var(--c4)}
-.icon-mint{background:var(--c5-light);color:var(--c1)}
+.icon-mint{background:var(--c5-light);color:var(--c3)}
 .icon-coral{background:var(--c3-light);color:var(--c3)}
 .form-group{margin-bottom:18px}
 .form-label{display:block;font-size:15px;font-weight:600;color:var(--gray-800);margin-bottom:6px}
 .form-label .required{color:var(--c3);margin-left:2px}
 .form-input{width:100%;padding:12px 14px;border:1.5px solid var(--gray-200);border-radius:10px;font-size:16px;font-family:inherit;background:#fff;transition:border-color .2s,box-shadow .2s;outline:none}
 .form-input:focus{border-color:var(--c1);box-shadow:0 0 0 3px rgba(38,110,151,0.12)}
-.form-input.error{border-color:var(--c3);box-shadow:0 0 0 3px rgba(238,99,69,0.1)}
+.form-input.error{border-color:var(--c3);box-shadow:0 0 0 3px rgba(124,77,160,0.1)}
+textarea.form-input,.feedback-input{min-height:100px;resize:vertical;width:100%;padding:12px 14px;border:1.5px solid var(--gray-200);border-radius:10px;font-size:16px;font-family:inherit;background:#fff;outline:none}
+textarea.feedback-input:focus{border-color:var(--c1);box-shadow:0 0 0 3px rgba(38,110,151,0.12)}
+.feedback-input.error{border-color:var(--c3);box-shadow:0 0 0 3px rgba(124,77,160,0.1)}
 .error-msg{font-size:13px;color:var(--c3);margin-top:4px;display:none}
 .error-msg.show{display:block}
 .radio-group{display:flex;flex-direction:column;gap:8px}
@@ -67,12 +70,13 @@ body{font-family:'Noto Sans TC','Outfit',sans-serif;background:var(--bg);min-hei
 .stage-title{font-weight:700;font-size:16px;color:var(--gray-800)}
 .stage-sub{font-size:13px;color:var(--gray-600);font-weight:500}
 .stage-badge{font-size:12px;padding:4px 12px;border-radius:20px;font-weight:700}
-.badge-done{background:var(--c5-light);color:var(--c1)}
+.badge-done{background:var(--c5-light);color:var(--c3)}
 .badge-pending{background:var(--c3-light);color:var(--c3)}
+.badge-draft{background:#FFF4E0;color:#D97706;border:1px solid #F5C572}
 .badge-locked{background:var(--gray-200);color:var(--gray-500)}
 .q-item{padding:16px 0;border-bottom:1px solid var(--gray-100)}
 .q-item:last-child{border-bottom:none}
-.q-item.missing{background:rgba(238,99,69,0.05);border-radius:8px;padding:16px 12px;border:1px solid rgba(238,99,69,0.2)}
+.q-item.missing{background:rgba(124,77,160,0.05);border-radius:8px;padding:16px 12px;border:1px solid rgba(124,77,160,0.2)}
 .q-text{font-size:16px;font-weight:500;color:var(--gray-800);margin-bottom:10px}
 .q-num{font-weight:700;color:var(--c1);margin-right:6px}
 .section-header{font-size:17px;font-weight:700;color:var(--cover);margin:28px 0 8px;padding-top:20px;border-top:2px solid var(--gray-200)}
@@ -88,42 +92,56 @@ body{font-family:'Noto Sans TC','Outfit',sans-serif;background:var(--bg);min-hei
 .consent-text{font-size:15px;line-height:1.6;font-weight:500;color:var(--gray-800)}
 .page{display:none}.page.active{display:block}
 .thank-you{text-align:center;padding:40px 0}
-.thank-you h2{font-size:28px;background:linear-gradient(135deg,var(--c1),var(--c5));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px}
-
-/* ===== 流程圖 ===== */
+.thank-you h2{font-size:28px;background:linear-gradient(135deg,var(--c1),var(--c3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px}
 .flow-chart{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0;margin-bottom:20px;padding:18px 10px;background:var(--c2-light);border-radius:14px;border:2px solid var(--c2)}
 .flow-step{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:50px;position:relative}
 .flow-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;border:2.5px solid var(--c1);background:#fff;color:var(--c1);transition:all .3s}
 .flow-step.done .flow-icon{background:var(--c1);border-color:var(--c1);color:#fff}
-.flow-step.current .flow-icon{background:var(--c3);border-color:var(--c3);color:#fff;box-shadow:0 0 0 4px rgba(238,99,69,0.3);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(238,99,69,0.3)}50%{box-shadow:0 0 0 8px rgba(238,99,69,0.1)}}
+.flow-step.current .flow-icon{background:var(--c3);border-color:var(--c3);color:#fff;box-shadow:0 0 0 4px rgba(124,77,160,0.3);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(124,77,160,0.3)}50%{box-shadow:0 0 0 8px rgba(124,77,160,0.1)}}
 .flow-step.locked .flow-icon{background:var(--gray-200);border-color:var(--gray-300);color:var(--gray-500)}
 .flow-label{font-size:11px;color:var(--gray-700);text-align:center;max-width:56px;line-height:1.3;font-weight:700}
 .flow-step.done .flow-label{color:var(--c1)}
 .flow-step.current .flow-label{color:var(--c3)}
 .flow-arrow{font-size:14px;color:var(--c1);margin:0 1px;flex-shrink:0;align-self:center;margin-bottom:20px}
-
-/* ===== 影片區塊 ===== */
 .video-section{margin-bottom:20px}
 .video-section .video-title{font-size:16px;font-weight:700;color:var(--cover);margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .video-wrap{position:relative;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.1)}
 .video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
-
-/* ===== 結論欄位 ===== */
 .conclusion-section{margin-bottom:20px;padding:16px;background:var(--c5-pale);border-radius:12px;border:2px solid var(--c5)}
 .conclusion-label{font-size:16px;font-weight:700;color:var(--cover);margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .btn-preview{background:var(--c4);color:#fff;margin-top:8px}
 .btn-preview:hover{background:var(--cover-alt)}
 .btn-send-ai{background:var(--c3);color:#fff;margin-top:8px}
-.btn-send-ai:hover{background:#D4553D}
+.btn-send-ai:hover{background:#683D8C}
 .conclusion-preview{background:var(--c4-light);border-radius:10px;padding:14px;margin-top:12px;font-size:15px;color:var(--gray-800);display:none}
 .conclusion-locked{opacity:0.6;pointer-events:none}
-
-/* ===== LINE 風格聊天室 ===== */
+.draft-banner{background:#FFF4E0;border:2px solid #F5C572;border-radius:12px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px;font-size:15px;color:#92400E}
+.draft-banner .draft-icon{font-size:20px;flex-shrink:0}
+.draft-banner strong{color:#B45309}
+.dash-incomplete-banner{background:#FFF4E0;border:2px solid #F5C572;border-radius:12px;padding:14px 16px;margin-bottom:18px;display:flex;align-items:center;gap:10px;font-size:15px;color:#92400E;font-weight:600;animation:bannerPulse 2.5s ease-in-out infinite}
+.dash-incomplete-banner .banner-icon{font-size:22px;flex-shrink:0}
+.dash-incomplete-banner strong{color:#B45309}
+@keyframes bannerPulse{0%,100%{border-color:#F5C572;box-shadow:0 0 0 0 rgba(245,197,114,0.4)}50%{border-color:#E89D2E;box-shadow:0 0 0 6px rgba(245,197,114,0.15)}}
+.ai-error-box{background:var(--c3-pale);border:2px solid var(--c3);border-radius:12px;padding:18px 20px;margin:16px 0;text-align:center}
+.ai-error-box .err-icon{font-size:32px;margin-bottom:8px}
+.ai-error-box .err-title{font-size:16px;font-weight:700;color:var(--c3);margin-bottom:8px}
+.ai-error-box .err-text{font-size:14px;color:var(--gray-700);margin-bottom:14px;line-height:1.6}
+.ai-error-box .btn-retry{background:var(--c3);color:#fff;padding:10px 24px;font-size:15px;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit}
+.ai-error-box .btn-retry:hover{background:#683D8C}
+.login-loading{text-align:center;padding:30px 20px;color:var(--c1)}
+.login-loading .spinner{display:inline-block;width:32px;height:32px;border:3px solid var(--c1-pale);border-top-color:var(--c1);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.login-error-box{background:var(--c3-pale);border:2px solid var(--c3);border-radius:12px;padding:18px 20px;margin:16px 0;text-align:center;display:none}
+.login-error-box.show{display:block}
+.login-error-box .err-icon{font-size:32px;margin-bottom:8px}
+.login-error-box .err-title{font-size:16px;font-weight:700;color:var(--c3);margin-bottom:8px}
+.login-error-box .err-text{font-size:14px;color:var(--gray-700);margin-bottom:14px;line-height:1.6}
+.login-error-box .btn-retry-login{background:var(--c3);color:#fff;padding:10px 24px;font-size:15px;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit}
+.login-error-box .btn-retry-login:hover{background:#683D8C}
 .chat-container{margin:20px 0;border-radius:14px;overflow:hidden;border:2px solid var(--c2);background:var(--c2-light)}
 .chat-header{background:var(--c1);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px}
 .chat-header-icon{width:32px;height:32px;border-radius:50%;background:var(--c5);display:flex;align-items:center;justify-content:center;font-size:16px}
-.chat-header-count{font-size:12px;font-weight:500;opacity:0.8;margin-left:auto}
 .chat-body{padding:16px 12px;max-height:500px;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
 .chat-msg{display:flex;gap:8px;align-items:flex-start;animation:msgIn 0.3s ease}
 @keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -131,13 +149,6 @@ body{font-family:'Noto Sans TC','Outfit',sans-serif;background:var(--bg);min-hei
 .chat-bubble{max-width:75%;padding:10px 14px;border-radius:14px 14px 14px 4px;font-size:14px;line-height:1.6;position:relative}
 .chat-name{font-size:11px;font-weight:700;margin-bottom:2px}
 .chat-text{color:var(--gray-800)}
-.chat-typing{display:flex;gap:4px;padding:8px 14px}
-.chat-typing span{width:6px;height:6px;border-radius:50%;background:var(--gray-400);animation:typing 1.2s infinite}
-.chat-typing span:nth-child(2){animation-delay:0.2s}
-.chat-typing span:nth-child(3){animation-delay:0.4s}
-@keyframes typing{0%,100%{opacity:0.3;transform:scale(0.8)}50%{opacity:1;transform:scale(1.2)}}
-
-/* ===== 成員介紹 ===== */
 .chat-members{padding:12px;background:rgba(255,255,255,0.6);border-bottom:1px solid rgba(38,110,151,0.1)}
 .chat-members-title{font-size:13px;font-weight:700;color:var(--c1);margin-bottom:8px}
 .chat-members-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
@@ -145,8 +156,6 @@ body{font-family:'Noto Sans TC','Outfit',sans-serif;background:var(--bg);min-hei
 .chat-member-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff}
 .chat-member-name{font-size:10px;font-weight:700;color:var(--gray-700);text-align:center}
 .chat-member-style{font-size:9px;color:var(--gray-500);text-align:center}
-
-/* ===== 泡泡上的標記按鈕 ===== */
 .bubble-mark{display:none;margin-top:6px}
 .bubble-mark-btn{border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;margin-right:4px}
 .bm-pos{background:var(--c1-pale);color:var(--c1)}
@@ -157,21 +166,15 @@ body{font-family:'Noto Sans TC','Outfit',sans-serif;background:var(--bg);min-hei
 .bm-clear:hover{background:var(--gray-300)}
 .chat-bubble.marked-pos{border-color:var(--c1) !important;background:var(--c1-pale) !important}
 .chat-bubble.marked-neg{border-color:var(--c3) !important;background:var(--c3-pale) !important}
-
-/* ===== 回饋計數條 ===== */
 .feedback-counter{text-align:center;font-size:15px;color:var(--gray-700);font-weight:700;margin:12px 0;padding:12px;background:var(--c4-light);border-radius:10px}
 .feedback-counter strong{color:var(--c1)}
 .feedback-counter .neg-count{color:var(--c3);font-weight:700}
-
-/* ===== 歷史回饋 ===== */
 .history-btn{background:var(--c4-light);color:var(--c4);border:1.5px solid var(--c4);padding:6px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;margin-left:auto}
 .history-btn:hover{background:var(--c4);color:#fff}
-
-/* ===== 傳送狀態 ===== */
 .sync-status{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:9999;transition:opacity .3s;pointer-events:none}
 .sync-ok{background:var(--c1);color:#fff;box-shadow:0 4px 12px rgba(38,110,151,0.3)}
-.sync-fail{background:var(--c3);color:#fff;box-shadow:0 4px 12px rgba(238,99,69,0.3)}
-
+.sync-fail{background:var(--c3);color:#fff;box-shadow:0 4px 12px rgba(124,77,160,0.3)}
+.version-tag{position:fixed;bottom:6px;left:6px;font-size:11px;color:#fff;background:var(--c3);padding:3px 8px;border-radius:6px;opacity:0.85;pointer-events:none;z-index:1;font-weight:700;letter-spacing:0.3px}
 @media(max-width:480px){.app{padding:12px 10px 40px}.card{padding:20px 16px}.likert-btn{font-size:13px;padding:8px 1px}.likert-labels{font-size:12px}.flow-chart{gap:0;padding:14px 6px}.flow-icon{width:32px;height:32px;font-size:12px}.flow-label{font-size:10px;max-width:48px}.flow-arrow{font-size:12px}.chat-body{max-height:400px}.chat-bubble{max-width:85%}}
 </style>
 </head>
@@ -184,48 +187,23 @@ body{font-family:'Noto Sans TC','Outfit',sans-serif;background:var(--bg);min-hei
     <div class="header" style="padding:16px 0 0"><h1 onclick="secretReset()" style="cursor:default;color:#fff">消費者決策研究</h1><p style="color:var(--c5)">課程互動平台（實驗組C）</p></div>
     <div style="text-align:center;padding:0 20px 16px">
       <svg width="260" height="180" viewBox="0 0 680 380" style="max-width:100%">
-        <rect x="0" y="280" width="680" height="100" fill="#EBF4F9" rx="0"/>
-        <rect x="0" y="270" width="680" height="14" fill="#6FBCD2" rx="0"/>
+        <rect x="0" y="280" width="680" height="100" fill="#EBF4F9"/>
+        <rect x="0" y="270" width="680" height="14" fill="#6FBCD2"/>
         <polygon points="40,120 140,120 150,160 30,160" fill="#266E97"/>
-        <polygon points="60,120 80,120 85,160 55,160" fill="#1B5675"/>
-        <polygon points="100,120 120,120 125,160 95,160" fill="#1B5675"/>
-        <rect x="50" y="160" width="90" height="120" fill="#E8E4D8" stroke="#266E97" stroke-width="1"/>
-        <rect x="65" y="180" width="25" height="40" fill="#EE6345" rx="2"/>
+        <rect x="50" y="160" width="90" height="120" fill="#E8E4D8" stroke="#266E97"/>
+        <rect x="65" y="180" width="25" height="40" fill="#7C4DA0" rx="2"/>
         <rect x="100" y="180" width="25" height="40" fill="#6FBCD2" rx="2"/>
-        <polygon points="520,140 640,140 650,175 510,175" fill="#83DDC6"/>
-        <polygon points="545,140 570,140 575,175 540,175" fill="#5DB8A6"/>
-        <polygon points="595,140 620,140 625,175 590,175" fill="#5DB8A6"/>
-        <rect x="525" y="175" width="110" height="105" fill="#E8E4D8" stroke="#83DDC6" stroke-width="1"/>
+        <polygon points="520,140 640,140 650,175 510,175" fill="#B891D9"/>
+        <rect x="525" y="175" width="110" height="105" fill="#E8E4D8" stroke="#B891D9"/>
         <rect x="545" y="195" width="30" height="35" fill="#5E6D9B" rx="2"/>
         <rect x="590" y="195" width="30" height="35" fill="#266E97" rx="2"/>
-        <g transform="translate(320,180)">
-          <polyline points="0,60 10,20 90,20 95,55 20,55" fill="none" stroke="#266E97" stroke-width="2.5" stroke-linejoin="round"/>
-          <line x1="95" y1="55" x2="20" y2="55" stroke="#266E97" stroke-width="2.5"/>
-          <line x1="0" y1="60" x2="-15" y2="75" stroke="#266E97" stroke-width="2.5" stroke-linecap="round"/>
-          <circle cx="35" cy="62" r="6" fill="#266E97"/><circle cx="35" cy="62" r="3" fill="white"/>
-          <circle cx="80" cy="62" r="6" fill="#266E97"/><circle cx="80" cy="62" r="3" fill="white"/>
-          <rect x="20" y="25" width="22" height="28" fill="#EE6345" rx="3"/>
-          <rect x="45" y="22" width="18" height="31" fill="#83DDC6" rx="3"/>
-          <rect x="66" y="28" width="20" height="25" fill="#6FBCD2" rx="3"/>
-        </g>
-        <g transform="translate(280,120)">
-          <circle cx="20" cy="15" r="16" fill="#F5D0A9"/>
-          <path d="M5,12 Q8,-5 25,-2 Q38,0 35,15" fill="#2D2D2D"/>
-          <rect x="8" y="30" width="24" height="35" fill="#5E6D9B" rx="4"/>
-          <line x1="8" y1="38" x2="-5" y2="55" stroke="#F5D0A9" stroke-width="5" stroke-linecap="round"/>
-          <line x1="32" y1="38" x2="52" y2="60" stroke="#F5D0A9" stroke-width="5" stroke-linecap="round"/>
-          <line x1="14" y1="65" x2="8" y2="100" stroke="#2D3748" stroke-width="5" stroke-linecap="round"/>
-          <line x1="26" y1="65" x2="35" y2="100" stroke="#2D3748" stroke-width="5" stroke-linecap="round"/>
-          <ellipse cx="5" cy="102" rx="8" ry="4" fill="#266E97"/>
-          <ellipse cx="38" cy="102" rx="8" ry="4" fill="#266E97"/>
-        </g>
-        <text x="370" y="90" font-family="Georgia,serif" font-size="42" font-weight="700" fill="#EE6345">?</text>
-        <text x="405" y="65" font-family="Georgia,serif" font-size="28" font-weight="700" fill="#83DDC6">?</text>
+        <text x="370" y="90" font-family="Georgia,serif" font-size="42" font-weight="700" fill="#7C4DA0">?</text>
+        <text x="405" y="65" font-family="Georgia,serif" font-size="28" font-weight="700" fill="#B891D9">?</text>
         <text x="345" y="70" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#5E6D9B">?</text>
       </svg>
     </div>
   </div>
-  <div class="card">
+  <div class="card" id="login-card">
     <div class="card-title"><div class="icon icon-purple">🔑</div>登入</div>
     <div class="form-group">
       <label class="form-label">請輸入學號<span class="required">*</span></label>
@@ -236,7 +214,22 @@ body{font-family:'Noto Sans TC','Outfit',sans-serif;background:var(--bg);min-hei
       <input class="form-input" id="login-id2" placeholder="再次輸入確認" maxlength="20" style="text-transform:uppercase">
     </div>
     <div class="error-msg" id="login-error"></div>
-    <button class="btn btn-primary btn-block" onclick="handleLogin()">進入平台</button>
+    <button class="btn btn-primary btn-block" id="login-btn" onclick="handleLogin()">進入平台</button>
+  </div>
+  <div class="card" id="login-loading-card" style="display:none">
+    <div class="login-loading">
+      <div class="spinner"></div>
+      <div style="font-weight:700;font-size:16px;margin-bottom:6px">正在載入您的進度...</div>
+      <div style="font-size:13px;color:var(--gray-500)">請稍候，正在從伺服器恢復您之前做過的內容</div>
+    </div>
+  </div>
+  <div class="card" id="login-error-card" style="display:none">
+    <div class="login-error-box show">
+      <div class="err-icon">⚠️</div>
+      <div class="err-title">連線失敗</div>
+      <div class="err-text" id="login-err-detail">無法連接到伺服器，可能是網路不穩定，請按下方按鈕重試。</div>
+      <button class="btn-retry-login" onclick="retryLogin()">重新嘗試</button>
+    </div>
   </div>
 </div>
 
@@ -248,12 +241,12 @@ body{font-family:'Noto Sans TC','Outfit',sans-serif;background:var(--bg);min-hei
     <div style="font-size:15px;line-height:1.8;color:var(--gray-600)">
       <p><strong>研究主題：</strong>擬人化社交AI代理人對使用者學習體驗之影響</p>
       <p style="margin-top:12px"><strong>研究說明：</strong></p>
-      <p>本研究旨在探討不同社群回饋來源對消費者行為學習成效的影響。您將在為期四週的課程中，完成消費者決策五階段的學習任務，並透過虛擬AI社群收集回饋意見。</p>
+      <p>本研究旨在探討不同社群回饋來源對消費者行為學習成效的影響。您將在課程中完成消費者決策五階段的學習任務，並透過虛擬AI社群收集回饋意見。</p>
       <p style="margin-top:12px"><strong>您的權益：</strong></p>
       <p>• 參與本研究完全自願，不影響您的課程成績。</p>
       <p>• 您可以隨時退出研究，無需說明理由。</p>
       <p>• 所有資料僅供學術研究使用，將以匿名方式處理。</p>
-      <p>• 您的個人資料（姓名、學號）僅用於前後測配對，不會出現在研究報告中。</p>
+      <p>• 您的個人資料（姓名、學號）僅用於資料配對，不會出現在研究報告中。</p>
       <p>• 研究資料將於研究結束後妥善保存5年，届時將安全銷毀。</p>
       <p style="margin-top:12px"><strong>研究聯絡人：</strong>開南大學商學院 蕭君華老師 (maehsaio@gapps.knu.edu.tw)</p>
     </div>
@@ -267,7 +260,7 @@ body{font-family:'Noto Sans TC','Outfit',sans-serif;background:var(--bg);min-hei
   <div class="header"><h1>消費者決策研究</h1><p id="demo-header-sub">基本資料</p></div>
   <div class="card">
     <div class="card-title"><div class="icon icon-mint">👤</div><span id="demo-card-title">基本資料</span></div>
-    <div id="demo-confirm-banner" style="display:none;background:var(--c5-pale);border-radius:12px;padding:14px 16px;margin-bottom:20px;font-size:15px;color:var(--c1);border:1.5px solid var(--c5)">歡迎回來！請確認以下資料是否正確，如需修改可直接編輯。</div>
+    <div id="demo-confirm-banner" style="display:none;background:var(--c5-pale);border-radius:12px;padding:14px 16px;margin-bottom:20px;font-size:15px;color:var(--c3);border:1.5px solid var(--c5)">歡迎回來！請確認以下資料是否正確，如需修改可直接編輯。</div>
     <div class="form-group"><label class="form-label">姓名<span class="required">*</span></label><input class="form-input" id="demo-name" placeholder="請輸入姓名"></div>
     <div class="form-group"><label class="form-label">性別<span class="required">*</span></label><div class="radio-group" id="demo-gender"><label class="radio-option" onclick="selR(this,'demo-gender')"><input type="radio" name="gender" value="男"><span class="radio-dot"></span>男</label><label class="radio-option" onclick="selR(this,'demo-gender')"><input type="radio" name="gender" value="女"><span class="radio-dot"></span>女</label><label class="radio-option" onclick="selR(this,'demo-gender')"><input type="radio" name="gender" value="不想回答"><span class="radio-dot"></span>不想回答</label></div></div>
     <div class="form-group"><label class="form-label">出生年份（西元）<span class="required">*</span></label><input class="form-input" id="demo-birth" type="number" placeholder="例：2003" min="1980" max="2010"></div>
@@ -281,41 +274,38 @@ body{font-family:'Noto Sans TC','Outfit',sans-serif;background:var(--bg);min-hei
   </div>
 </div>
 
-<!-- PRE-TEST -->
-<div class="page" id="page-pretest">
-  <div class="header"><h1>消費者決策研究</h1><p>前測問卷</p></div>
-  <div class="card">
-    <div class="card-title"><div class="icon icon-purple">📝</div>前測問卷</div>
-    <p style="font-size:14px;color:var(--gray-500);margin-bottom:4px">請依據您目前的真實感受作答</p>
-    <p style="font-size:15px;color:var(--gray-800);margin-bottom:16px;font-weight:700;background:var(--c3-light);padding:8px 12px;border-radius:8px">1＝非常不同意　2＝不同意　3＝有點不同意　4＝普通　5＝有點同意　6＝同意　7＝非常同意</p>
-    <div id="pretest-items"></div>
-    <button class="btn btn-primary btn-block" style="margin-top:20px" onclick="handlePretest()">送出前測</button>
-  </div>
-</div>
-
 <!-- DASHBOARD -->
 <div class="page" id="page-dashboard">
   <div class="topbar"><div class="topbar-user">您好，<strong id="dash-name"></strong></div><button class="btn-logout" onclick="handleLogout()">⏻ 登出</button></div>
   <div class="card">
     <div class="card-title"><div class="icon icon-purple">📊</div>課程總覽</div>
+    <div class="dash-incomplete-banner" id="dash-incomplete-banner" style="display:none">
+      <span class="banner-icon">⚠️</span>
+      <div>您有未完成的階段，請點橘色「<strong>繼續填寫</strong>」按鈕完成</div>
+    </div>
     <div class="flow-chart" id="flow-chart"></div>
     <p style="font-size:14px;color:var(--gray-500);margin-bottom:16px">請依序完成各階段。觀看影片後，向「購物智囊團」提交結論並收集回饋。</p>
     <div class="stage-list" id="stage-list"></div>
   </div>
 </div>
 
-<!-- FEEDBACK (with video + Social AI chat) -->
+<!-- FEEDBACK -->
 <div class="page" id="page-feedback">
   <div class="topbar"><button class="btn-outline" onclick="leaveFeedback()">← 返回總覽</button><button class="btn-logout" onclick="handleLogout()">⏻ 登出</button></div>
   <div class="card">
     <div class="card-title" id="fb-title"></div>
+    <div class="draft-banner" id="draft-banner" style="display:none">
+      <span class="draft-icon">📝</span>
+      <div>
+        <strong>已自動儲存你上次的進度</strong><br>
+        <span style="font-size:13px">你之前填寫的結論、AI 回覆和已選的項目都幫你保留了，<strong>繼續完成 3+3 選擇即可送出</strong>，不需要重新請 AI。</span>
+      </div>
+    </div>
     <div class="video-section" id="fb-video-section">
       <div class="video-title">🎬 課程影片</div>
       <div class="video-wrap"><iframe id="fb-video" src="" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div>
     </div>
     <div id="fb-prompt" style="background:var(--c1-pale);border-radius:12px;padding:14px 16px;margin-bottom:20px;font-size:15px;color:var(--c1);border:1.5px solid var(--c1)"></div>
-
-    <!-- Conclusion with preview/confirm -->
     <div class="conclusion-section" id="conclusion-section">
       <div class="conclusion-label">📌 小組結論答案<span class="required">*</span></div>
       <p style="font-size:13px;color:var(--gray-500);margin-bottom:8px">請填寫小組討論後的最終結論，確認後將送至「購物智囊團」取得回饋</p>
@@ -330,8 +320,12 @@ body{font-family:'Noto Sans TC','Outfit',sans-serif;background:var(--bg);min-hei
         </div>
       </div>
     </div>
-
-    <!-- Chat UI (hidden until AI responds) -->
+    <div class="ai-error-box" id="ai-error-box" style="display:none">
+      <div class="err-icon">⚠️</div>
+      <div class="err-title">購物智囊團暫時沒有回應</div>
+      <div class="err-text" id="ai-err-detail">請檢查網路連線後再試一次。如果一直無法成功，請通知老師。</div>
+      <button class="btn-retry" onclick="retryAI()">重新請購物智囊團回饋</button>
+    </div>
     <div id="chat-section" style="display:none">
       <div class="chat-container">
         <div class="chat-header">
@@ -341,20 +335,16 @@ body{font-family:'Noto Sans TC','Outfit',sans-serif;background:var(--bg);min-hei
             <div style="font-size:11px;opacity:0.8;font-weight:400">8 位不同消費風格的虛擬成員，從各自的角度給你回饋</div>
           </div>
         </div>
-        <!-- Member intro -->
         <div class="chat-members" id="chat-members">
           <div class="chat-members-title">成員介紹</div>
           <div class="chat-members-grid" id="chat-members-grid"></div>
         </div>
-        <!-- Instruction -->
-        <div id="chat-instruction" style="display:none;padding:12px 14px;background:var(--c3-light);border-bottom:1px solid rgba(238,99,69,0.15);font-size:14px;color:var(--gray-800);line-height:1.6">
+        <div id="chat-instruction" style="display:none;padding:12px 14px;background:var(--c3-light);border-bottom:1px solid rgba(124,77,160,0.15);font-size:14px;color:var(--gray-800);line-height:1.6">
           <strong style="color:var(--c3)">📋 以下是購物智囊團成員針對你的結論，給出的正反不同意見回饋。</strong><br>
           請從中選擇 <strong style="color:var(--c1)">3 個正面回饋（按 👍 正面）</strong>和 <strong style="color:var(--c3)">3 個反面意見（按 👎 反面）</strong>，選完後按下方「送出回饋紀錄」。
         </div>
         <div class="chat-body" id="chat-body"></div>
       </div>
-
-      <!-- Counter + submit (shown after all messages appear) -->
       <div id="feedback-bar" style="display:none">
         <div class="feedback-counter" id="feedback-counter">已選：正面 <strong>0</strong>/3　反面 <span class="neg-count">0</span>/3</div>
         <button class="btn btn-primary btn-block" style="margin-top:8px" id="btn-submit-feedback" onclick="handleFeedback()" disabled>送出回饋紀錄</button>
@@ -380,7 +370,7 @@ body{font-family:'Noto Sans TC','Outfit',sans-serif;background:var(--bg);min-hei
   <div class="card">
     <div class="card-title"><div class="icon icon-coral">📝</div>後測問卷</div>
     <p style="font-size:14px;color:var(--gray-500);margin-bottom:4px">請依據您參與本課程後的真實感受作答</p>
-    <p style="font-size:15px;color:var(--gray-800);margin-bottom:16px;font-weight:700;background:var(--c3-light);padding:8px 12px;border-radius:8px">Likert量表：1＝非常不同意 ～ 7＝非常同意（知識測驗除外）</p>
+    <p style="font-size:15px;color:var(--gray-800);margin-bottom:16px;font-weight:700;background:var(--c3-light);padding:8px 12px;border-radius:8px">Likert量表：1＝非常不同意 ～ 7＝非常同意</p>
     <div id="posttest-items"></div>
     <button class="btn btn-primary btn-block" style="margin-top:20px" onclick="handlePosttest()">送出後測</button>
   </div>
@@ -394,7 +384,7 @@ body{font-family:'Noto Sans TC','Outfit',sans-serif;background:var(--bg);min-hei
     <p style="color:var(--gray-500);margin-bottom:20px;font-size:16px">您已完成所有問卷填答。您的回覆對本研究非常有價值。</p>
     <p style="font-size:15px;color:var(--gray-600);text-align:left;line-height:1.8">
       <strong>研究說明：</strong><br>
-      本研究比較不同社群回饋來源（AI虛擬社群 vs. 真人同儕）對消費者行為學習成效的影響。您所屬的組別是「虛擬AI社群組」，透過「購物智囊團」收集回饋意見。<br><br>
+      本研究探討「擬人化社交AI代理人」對使用者學習體驗之影響。您透過「購物智囊團」收集回饋意見，您的回覆將協助我們了解 AI 社群在學習中的角色。<br><br>
       如有任何疑問，歡迎聯繫研究負責人：蕭君華老師 (maehsaio@gapps.knu.edu.tw)。
     </p>
   </div>
@@ -402,21 +392,19 @@ body{font-family:'Noto Sans TC','Outfit',sans-serif;background:var(--bg);min-hei
 
 </div>
 <div class="sync-status" id="sync-status" style="opacity:0"></div>
+<div class="version-tag">vC2.0-20260429</div>
 
 <script>
-// ===== PLACEHOLDER: 版面預覽用，無實際後端功能 =====
 const LIKERT_N=7;
-const API_KEY=''; // 不需要，透過 Apps Script 呼叫
 const SHEET_URL='https://script.google.com/macros/s/AKfycbyPSC9N_N9om3p5FP34swBT0b9lb6A70dWLpAzx2Mm90x1_d8MLjk7fhcmD_QxCAqbA/exec';
 
-// 8 personas
 const PERSONAS=[
   {id:'pinpin',name:'品品',style:'品質控',color:'#266E97',emoji:'🔍',desc:'追求最高品質，挑剔細節'},
   {id:'brand',name:'名牌哥',style:'品牌控',color:'#5E6D9B',emoji:'👔',desc:'認為貴就是好，重視品牌'},
-  {id:'trendy',name:'潮潮',style:'潮流控',color:'#EE6345',emoji:'🔥',desc:'追新品追趨勢，喜歡嘗鮮'},
-  {id:'happy',name:'樂樂',style:'享樂控',color:'#83DDC6',emoji:'🎉',desc:'享受購物本身的樂趣'},
+  {id:'trendy',name:'潮潮',style:'潮流控',color:'#7C4DA0',emoji:'🔥',desc:'追新品追趨勢，喜歡嘗鮮'},
+  {id:'happy',name:'樂樂',style:'享樂控',color:'#B891D9',emoji:'🎉',desc:'享受購物本身的樂趣'},
   {id:'saver',name:'省省',style:'CP值控',color:'#1B5675',emoji:'💰',desc:'精打細算，追求CP值'},
-  {id:'impulse',name:'衝衝',style:'衝動控',color:'#EE6345',emoji:'⚡',desc:'看到喜歡就買，不想太多'},
+  {id:'impulse',name:'衝衝',style:'衝動控',color:'#7C4DA0',emoji:'⚡',desc:'看到喜歡就買，不想太多'},
   {id:'hesit',name:'猶豫姐',style:'選擇困難控',color:'#5E6D9B',emoji:'🤔',desc:'什麼都好但什麼都不確定'},
   {id:'loyal',name:'忠忠',style:'忠誠控',color:'#266E97',emoji:'🛡️',desc:'認定一個牌子就不換'},
 ];
@@ -427,22 +415,8 @@ const STAGES=[
   {id:2,title:'階段二：資訊蒐集',sub:'Information Search',prompt:'針對這個產品，你會從哪裡蒐集資訊？你最擔心什麼風險？',video:'00pYNICw5uo'},
   {id:3,title:'階段三：方案評估',sub:'Evaluation of Alternatives',prompt:'我們比較了三個品牌 [請列出]，最終選了 [X]。你會選哪個？為什麼？我們的評估有什麼盲點嗎？',video:'bxBbJL4c3QM'},
   {id:4,title:'階段四：購買決策',sub:'Purchase Decision',prompt:'我們決定買 [X] 了，但室友說那品牌很爛。你覺得該聽他的嗎？為什麼？',video:'2wZFd8zrTfg'},
-  {id:5,title:'階段五：購後行為',sub:'Post-Purchase Behavior',prompt:'買了之後發現 [請描述問題]。如果是你，會退貨還是留著？為什麼？',video:'PR_ELIZpB2o'},
+  {id:5,title:'階段五:購後行為',sub:'Post-Purchase Behavior',prompt:'買了之後發現 [請描述問題]。如果是你，會退貨還是留著？為什麼？',video:'PR_ELIZpB2o'},
   {id:6,title:'期末報告與後測',sub:'Final Report & Post-Test',prompt:'',video:'mfrM5OF20HE',isFinal:true},
-];
-
-const PRETEST=[
-  {sec:'自我效能 Self-Efficacy (SE)',items:[
-    {id:'SE1',text:'我有信心自己具備有效使用生成式AI的能力。'},
-    {id:'SE2',text:'即使身邊沒有人指導，我也相信自己能獨立使用生成式AI。'},
-    {id:'SE3',text:'我有信心能將生成式AI的優勢有效地運用在課業中。'},
-  ]},
-  {sec:'互動焦慮 Interaction Anxiety (IA)',items:[
-    {id:'IA1',text:'當我和不太熟識的人交談時，我會感到緊張。'},
-    {id:'IA2',text:'當我必須向他人談論自己的想法或表現時，我會感到緊張。'},
-    {id:'IA3',text:'當我需要向他人尋求協助或建議時，我會感到猶豫。'},
-    {id:'IA4',text:'當接收回饋時，我會害怕受到他人的評判。'},
-  ]},
 ];
 
 const POSTTEST=[
@@ -492,14 +466,22 @@ const POSTTEST=[
 ];
 
 let state={},currentStage=null,currentAIResponses=[];
+let pendingLoginId='';
 function loadState(){const s=localStorage.getItem('socialai_exp_c_v1');if(s)state=JSON.parse(s)}
 function saveState(){localStorage.setItem('socialai_exp_c_v1',JSON.stringify(state))}
 
-// ===== UI HELPERS =====
+function draftKey(stageId){return 'socialai_c_draft_s'+stageId}
+function saveDraft(stageId,draft){try{localStorage.setItem(draftKey(stageId),JSON.stringify(draft))}catch(e){}}
+function loadDraft(stageId){try{const s=localStorage.getItem(draftKey(stageId));return s?JSON.parse(s):null}catch(e){return null}}
+function clearDraft(stageId){try{localStorage.removeItem(draftKey(stageId))}catch(e){}}
+function hasDraft(stageId){const d=loadDraft(stageId);return !!(d&&(d.conclusion||(d.aiResponses&&d.aiResponses.length)))}
+
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
 function selR(el,gid){document.querySelectorAll('#'+gid+' .radio-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');el.querySelector('input').checked=true}
 function selL(btn){btn.parentElement.querySelectorAll('.likert-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected')}
 function showSyncStatus(msg,type){const el=document.getElementById('sync-status');el.textContent=msg;el.className='sync-status '+(type==='ok'?'sync-ok':'sync-fail');el.style.opacity='1';setTimeout(()=>{el.style.opacity='0'},3000)}
+function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+
 function sendToSheet(d){
   if(!SHEET_URL)return;
   try{
@@ -515,25 +497,118 @@ function sendToSheet(d){
     setTimeout(()=>{form.remove();iframe.remove()},5000);
   }catch(err){showSyncStatus('✗ 傳送失敗','fail')}
 }
-function leaveFeedback(){document.getElementById('fb-video').src='';showPage('page-dashboard')}
 
-// ===== LOGIN =====
+function leaveFeedback(){
+  if(currentStage&&!state.stages[currentStage.id]&&currentAIResponses.length){
+    saveCurrentDraft();
+  }
+  document.getElementById('fb-video').src='';showPage('page-dashboard');
+  renderDashboard();
+}
+// ===== LOGIN（v2 含 ITP 修復）=====
 let loginStep=1;
+
 function handleLogin(){
   const id1=document.getElementById('login-id1').value.trim().toUpperCase();
   const err=document.getElementById('login-error');
   if(!id1){err.textContent='請輸入學號';err.classList.add('show');return}
+
   loadState();
-  const returning=state.studentId===id1&&state.consented&&state.pretest;
-  if(returning){err.classList.remove('show');loginStep=1;if(state.posttest_done){showPage('page-thankyou')}else{fillDemoFromState();showPage('page-demo')}}
-  else{
-    if(loginStep===1){document.getElementById('login-id2-group').style.display='block';document.getElementById('login-id2').focus();err.textContent='首次登入，請再次輸入學號確認';err.classList.add('show');err.style.color='var(--c1)';loginStep=2;return}
-    const id2=document.getElementById('login-id2').value.trim().toUpperCase();
-    if(!id2){err.textContent='請再次輸入學號確認';err.style.color='';err.classList.add('show');return}
-    if(id1!==id2){err.textContent='兩次輸入的學號不一致';err.style.color='';err.classList.add('show');return}
-    err.classList.remove('show');err.style.color='';loginStep=1;
-    state={studentId:id1,group:'experiment_c'};saveState();showPage('page-consent');
+
+  // localStorage 完整 returning user（版C 沒有前測，consented + name 算完整）
+  const localFull=state.studentId===id1&&state.consented&&state.name;
+  if(localFull){
+    err.classList.remove('show');loginStep=1;
+    if(state.posttest_done){showPage('page-thankyou')}
+    else{fillDemoFromState();showPage('page-demo')}
+    return;
   }
+
+  // localStorage 不完整 → 從 Sheet 查詢
+  err.classList.remove('show');
+  pendingLoginId = id1;
+  fetchStudentFromSheet(id1);
+}
+
+function fetchStudentFromSheet(studentId){
+  document.getElementById('login-card').style.display='none';
+  document.getElementById('login-error-card').style.display='none';
+  document.getElementById('login-loading-card').style.display='block';
+
+  const url = SHEET_URL + '?action=load&studentId=' + encodeURIComponent(studentId);
+
+  fetch(url, {method:'GET'})
+    .then(function(r){
+      if(!r.ok) throw new Error('伺服器回應錯誤 ' + r.status);
+      return r.text();
+    })
+    .then(function(raw){
+      var data;
+      try{ data = JSON.parse(raw); }
+      catch(e){ throw new Error('伺服器回應格式錯誤'); }
+
+      if(data.status === 'ok' && data.data){
+        state = data.data;
+        saveState();
+        document.getElementById('login-loading-card').style.display='none';
+        document.getElementById('login-card').style.display='block';
+
+        if(state.posttest_done){
+          showPage('page-thankyou');
+        }else if(state.consented && state.name){
+          fillDemoFromState();
+          showPage('page-demo');
+        }else{
+          startFreshLogin(studentId);
+        }
+        return;
+      }
+
+      if(data.status === 'not_found'){
+        document.getElementById('login-loading-card').style.display='none';
+        document.getElementById('login-card').style.display='block';
+        startFreshLogin(studentId);
+        return;
+      }
+
+      throw new Error(data.message || '伺服器回應異常');
+    })
+    .catch(function(err){
+      console.error('Login fetch error:', err);
+      document.getElementById('login-loading-card').style.display='none';
+      document.getElementById('login-error-card').style.display='block';
+      document.getElementById('login-err-detail').textContent =
+        '無法連接到伺服器：' + err.message + '。請確認網路連線後按下方按鈕重試。';
+    });
+}
+
+function retryLogin(){
+  if(pendingLoginId){
+    fetchStudentFromSheet(pendingLoginId);
+  }else{
+    document.getElementById('login-error-card').style.display='none';
+    document.getElementById('login-card').style.display='block';
+  }
+}
+
+function startFreshLogin(id1){
+  const err=document.getElementById('login-error');
+  if(loginStep===1){
+    document.getElementById('login-id2-group').style.display='block';
+    document.getElementById('login-id2').focus();
+    err.textContent='首次登入，請再次輸入學號確認';
+    err.classList.add('show');
+    err.style.color='var(--c1)';
+    loginStep=2;
+    return;
+  }
+  const id2=document.getElementById('login-id2').value.trim().toUpperCase();
+  if(!id2){err.textContent='請再次輸入學號確認';err.style.color='';err.classList.add('show');return}
+  if(id1!==id2){err.textContent='兩次輸入的學號不一致';err.style.color='';err.classList.add('show');return}
+  err.classList.remove('show');err.style.color='';loginStep=1;
+  state={studentId:id1,group:'experiment_c'};
+  saveState();
+  showPage('page-consent');
 }
 
 function fillDemoFromState(){
@@ -542,7 +617,7 @@ function fillDemoFromState(){
   document.getElementById('demo-dept').value=state.dept||'';
   ['gender','grade','spending','ai','aitool','aifreq'].forEach(f=>{
     const key={gender:'gender',grade:'grade',spending:'spending',ai:'ai_familiarity',aitool:'ai_tool',aifreq:'ai_freq'}[f];
-    if(state[key]){document.querySelectorAll('#demo-'+f+' input, #demo-'+f.replace(/([A-Z])/g,m=>m.toLowerCase())+' input').forEach(inp=>{if(inp.value===state[key]){inp.checked=true;inp.closest('.radio-option').classList.add('selected')}})}
+    if(state[key]){document.querySelectorAll('#demo-'+f+' input').forEach(inp=>{if(inp.value===state[key]){inp.checked=true;inp.closest('.radio-option').classList.add('selected')}})}
   });
   document.getElementById('demo-header-sub').textContent='確認基本資料';
   document.getElementById('demo-card-title').textContent='確認基本資料';
@@ -552,16 +627,22 @@ function fillDemoFromState(){
 }
 
 document.getElementById('consent-check').addEventListener('change',function(){document.getElementById('consent-btn').disabled=!this.checked});
-function handleConsent(){if(!document.getElementById('consent-check').checked)return;state.consented=true;state.consent_time=new Date().toISOString();saveState();
-  document.getElementById('demo-header-sub').textContent='基本資料';document.getElementById('demo-card-title').textContent='基本資料';
-  document.getElementById('demo-confirm-banner').style.display='none';document.getElementById('demo-submit-btn').textContent='進入課程總覽';
-  document.getElementById('demo-submit-btn').onclick=handleDemo;showPage('page-demo');
+function handleConsent(){
+  if(!document.getElementById('consent-check').checked)return;
+  state.consented=true;state.consent_time=new Date().toISOString();saveState();
+  document.getElementById('demo-header-sub').textContent='基本資料';
+  document.getElementById('demo-card-title').textContent='基本資料';
+  document.getElementById('demo-confirm-banner').style.display='none';
+  document.getElementById('demo-submit-btn').textContent='進入課程總覽';
+  document.getElementById('demo-submit-btn').onclick=handleDemo;
+  showPage('page-demo');
 }
 
 function handleDemo(){
   const n=document.getElementById('demo-name').value.trim(),g=document.querySelector('#demo-gender input:checked'),b=document.getElementById('demo-birth').value.trim(),d=document.getElementById('demo-dept').value.trim(),gr=document.querySelector('#demo-grade input:checked'),sp=document.querySelector('#demo-spending input:checked'),a=document.querySelector('#demo-ai input:checked'),at=document.querySelector('#demo-aitool input:checked'),af=document.querySelector('#demo-aifreq input:checked');
   if(!n||!g||!b||!d||!gr||!sp||!a||!at||!af){alert('請填寫所有必填項目');return}
-  state.name=n;state.gender=g.value;state.birth=b;state.dept=d;state.grade=gr.value;state.spending=sp.value;state.ai_familiarity=a.value;state.ai_tool=at.value;state.ai_freq=af.value;state.demo_time=new Date().toISOString();state.pretest={done:true};state.pretest_time=new Date().toISOString();state.stages={};saveState();
+  state.name=n;state.gender=g.value;state.birth=b;state.dept=d;state.grade=gr.value;state.spending=sp.value;state.ai_familiarity=a.value;state.ai_tool=at.value;state.ai_freq=af.value;state.demo_time=new Date().toISOString();state.stages={};saveState();
+  // 版C 沒有前測，但用 'pretest' type 寫入基本資料（Code.gs 也是用這個 type 寫基本資料）
   sendToSheet({type:'pretest',studentId:state.studentId,data:state});
   renderDashboard();showPage('page-dashboard');
 }
@@ -571,50 +652,56 @@ function handleDemoConfirm(){
   state.name=n;state.gender=g.value;state.birth=b;state.dept=d;state.grade=gr.value;state.spending=sp.value;state.ai_familiarity=a.value;state.ai_tool=at.value;state.ai_freq=af.value;saveState();
   renderDashboard();showPage('page-dashboard');
 }
-
 // ===== SURVEY RENDER =====
 function renderSurvey(containerId,sections,prefix){
   const c=document.getElementById(containerId);c.innerHTML='';
   sections.forEach(sec=>{
     const sh=document.createElement('div');sh.className='section-header';sh.textContent=sec.sec;
     if(sec.note)sh.innerHTML+=`<span class="section-sub">${sec.note}</span>`;c.appendChild(sh);
-    if(sec.type==='mc'){sec.items.forEach(item=>{const d=document.createElement('div');d.className='q-item';d.id='qi-'+prefix+item.id;d.innerHTML=`<div class="q-text"><span class="q-num">${item.id}</span>${item.text}</div><div class="radio-group" id="mc-${prefix}${item.id}">${item.opts.map(o=>`<label class="radio-option" onclick="selR(this,'mc-${prefix}${item.id}')"><input type="radio" name="mc-${prefix}${item.id}" value="${o.charAt(1)}"><span class="radio-dot"></span>${o}</label>`).join('')}</div>`;c.appendChild(d)})}
-    else{sec.items.forEach(item=>{const d=document.createElement('div');d.className='q-item';d.id='qi-'+prefix+item.id;d.innerHTML=`<div class="q-text"><span class="q-num">${item.id.replace(/_post$/,'')}</span>${item.text}</div><div class="likert-row">${Array.from({length:LIKERT_N},(_,i)=>i+1).map(v=>`<button type="button" class="likert-btn" data-id="${prefix}${item.id}" data-val="${v}" onclick="selL(this)">${v}</button>`).join('')}</div><div class="likert-labels"><span>非常不同意</span><span>非常同意</span></div>`;c.appendChild(d)})}
+    sec.items.forEach(item=>{
+      const d=document.createElement('div');d.className='q-item';d.id='qi-'+prefix+item.id;
+      d.innerHTML=`<div class="q-text"><span class="q-num">${item.id}</span>${item.text}</div><div class="likert-row">${Array.from({length:LIKERT_N},(_,i)=>i+1).map(v=>`<button type="button" class="likert-btn" data-id="${prefix}${item.id}" data-val="${v}" onclick="selL(this)">${v}</button>`).join('')}</div><div class="likert-labels"><span>非常不同意</span><span>非常同意</span></div>`;
+      c.appendChild(d);
+    });
   });
 }
 function collectSurvey(sections,prefix){
   const vals={};let firstMissing=null;
   document.querySelectorAll('.q-item.missing').forEach(el=>el.classList.remove('missing'));
-  sections.forEach(sec=>{sec.items.forEach(item=>{const key=item.id;
-    if(sec.type==='mc'){const sel=document.querySelector(`#mc-${prefix}${item.id} input:checked`);if(sel)vals[key]=sel.value;else{if(!firstMissing){firstMissing=document.getElementById('qi-'+prefix+item.id);firstMissing.classList.add('missing')}}}
-    else{const sel=document.querySelector(`.likert-btn.selected[data-id="${prefix}${item.id}"]`);if(sel)vals[key]=parseInt(sel.dataset.val);else{if(!firstMissing){firstMissing=document.getElementById('qi-'+prefix+item.id);firstMissing.classList.add('missing')}}}
+  sections.forEach(sec=>{sec.items.forEach(item=>{
+    const sel=document.querySelector(`.likert-btn.selected[data-id="${prefix}${item.id}"]`);
+    if(sel)vals[item.id]=parseInt(sel.dataset.val);
+    else{if(!firstMissing){firstMissing=document.getElementById('qi-'+prefix+item.id);firstMissing.classList.add('missing')}}
   })});
   if(firstMissing){firstMissing.scrollIntoView({behavior:'smooth',block:'center'});return null}
   return vals;
 }
-function handlePretest(){const vals=collectSurvey(PRETEST,'pre_');if(!vals)return;state.pretest=vals;state.pretest_time=new Date().toISOString();state.stages={};saveState();sendToSheet({type:'pretest',studentId:state.studentId,data:state});renderDashboard();showPage('page-dashboard')}
-function handlePosttest(){const vals=collectSurvey(POSTTEST,'post_');if(!vals)return;state.posttest=vals;state.posttest_time=new Date().toISOString();state.posttest_done=true;saveState();sendToSheet({type:'posttest',studentId:state.studentId,data:state});showPage('page-thankyou')}
+function handlePosttest(){
+  const vals=collectSurvey(POSTTEST,'post_');if(!vals)return;
+  state.posttest=vals;state.posttest_time=new Date().toISOString();state.posttest_done=true;saveState();
+  sendToSheet({type:'posttest',studentId:state.studentId,data:state});
+  showPage('page-thankyou');
+}
 
-// ===== FLOW CHART =====
+// ===== FLOW CHART（版C：無前測 step）=====
 function renderFlowChart(){
   const fc=document.getElementById('flow-chart');fc.innerHTML='';
-  const pretestDone=!!state.pretest;
   const taskStages=STAGES.filter(s=>!s.isCourse&&!s.isFinal);
   const allTasksDone=taskStages.every(s=>state.stages&&state.stages[s.id]);
   const posttestDone=!!state.posttest_done;
   let firstIncomplete=taskStages.length;
   if(state.stages){for(let i=0;i<taskStages.length;i++){if(!state.stages[taskStages[i].id]){firstIncomplete=i;break}}}
+  // 版C：第一個 step 是「課程說明」，沒有「前測」
   const steps=[
-    {label:'前測',done:pretestDone},
-    {label:'課程\n說明',done:!!(state.stages&&state.stages[0]),current:pretestDone&&!(state.stages&&state.stages[0])},
-    ...taskStages.map((s,i)=>({label:s.title.replace(/階段.：/,''),done:!!(state.stages&&state.stages[s.id]),current:!!(state.stages&&state.stages[0])&&pretestDone&&i===firstIncomplete&&!(state.stages&&state.stages[s.id]),locked:i>firstIncomplete||!(state.stages&&state.stages[0])})),
+    {label:'課程\n說明',done:!!(state.stages&&state.stages[0]),current:!(state.stages&&state.stages[0])},
+    ...taskStages.map((s,i)=>({label:s.title.replace(/階段.[：:]/,''),done:!!(state.stages&&state.stages[s.id]),current:!!(state.stages&&state.stages[0])&&i===firstIncomplete&&!(state.stages&&state.stages[s.id]),locked:i>firstIncomplete||!(state.stages&&state.stages[0])})),
     {label:'期末\n報告',done:!!(state.stages&&state.stages[6]),current:allTasksDone&&!(state.stages&&state.stages[6]),locked:!allTasksDone},
     {label:'後測',done:posttestDone,current:!!(state.stages&&state.stages[6])&&!posttestDone,locked:!(state.stages&&state.stages[6])}
   ];
   steps.forEach((step,i)=>{
     const el=document.createElement('div');el.className='flow-step';
     if(step.done)el.classList.add('done');else if(step.current)el.classList.add('current');else if(step.locked)el.classList.add('locked');
-    const icon=document.createElement('div');icon.className='flow-icon';icon.textContent=step.done?'✓':(i===0?'前':i===steps.length-1?'後':i);
+    const icon=document.createElement('div');icon.className='flow-icon';icon.textContent=step.done?'✓':(i===steps.length-1?'後':i===0?'📖':i);
     const label=document.createElement('div');label.className='flow-label';label.textContent=step.label;
     el.appendChild(icon);el.appendChild(label);fc.appendChild(el);
     if(i<steps.length-1){const arrow=document.createElement('span');arrow.className='flow-arrow';arrow.textContent='→';fc.appendChild(arrow)}
@@ -631,19 +718,34 @@ function renderDashboard(){
   let firstIncomplete=taskStages.length;
   for(let i=0;i<taskStages.length;i++){if(!state.stages[taskStages[i].id]){firstIncomplete=i;break}}
 
+  // 未完成提醒橫條
+  let hasIncompleteWithDraft=false;
+  taskStages.forEach(s=>{
+    if(!state.stages[s.id]&&hasDraft(s.id)){hasIncompleteWithDraft=true}
+  });
+  const banner=document.getElementById('dash-incomplete-banner');
+  if(banner){banner.style.display=hasIncompleteWithDraft?'flex':'none'}
+
   STAGES.forEach(s=>{
     const done=!!state.stages[s.id];
     let locked=false;
     if(s.isCourse)locked=false;
     else if(s.isFinal)locked=!taskStages.every(ts=>state.stages[ts.id]);
     else{const idx=taskStages.indexOf(s);locked=idx>firstIncomplete||!state.stages[0]}
+    const hasDraftForStage=!done&&!locked&&!s.isCourse&&!s.isFinal&&hasDraft(s.id);
     const div=document.createElement('div');
     div.className=`stage-item ${done?'completed':locked?'locked':''}`;
+    let badge;
+    if(done)badge='<span class="stage-badge badge-done">已完成</span>';
+    else if(locked)badge='<span class="stage-badge badge-locked">未開放</span>';
+    else if(hasDraftForStage)badge='<span class="stage-badge badge-draft">繼續填寫</span>';
+    else if(s.isCourse||s.isFinal)badge='<span class="stage-badge badge-pending">待觀看</span>';
+    else badge='<span class="stage-badge badge-pending">待填寫</span>';
     div.innerHTML=`
       <div class="stage-num">${done?'✓':s.isCourse?'📖':s.isFinal?'📝':s.id}</div>
       <div class="stage-info"><div class="stage-title">${s.title}</div><div class="stage-sub">${s.sub}</div></div>
       ${done&&!s.isCourse&&!s.isFinal?'<button class="history-btn" onclick="event.stopPropagation();openHistory('+s.id+')">查看回饋</button>':''}
-      <span class="stage-badge ${done?'badge-done':locked?'badge-locked':'badge-pending'}">${done?'已完成':locked?'未開放':(s.isCourse||s.isFinal)?'待觀看':'待填寫'}</span>`;
+      ${badge}`;
     if(!done&&!locked){
       if(s.isCourse)div.onclick=()=>openCourseIntro();
       else if(s.isFinal)div.onclick=()=>openFinalReport();
@@ -651,7 +753,6 @@ function renderDashboard(){
     }
     list.appendChild(div);
   });
-  // Post-test
   const allDone=taskStages.every(ts=>state.stages[ts.id])&&state.stages[6];
   const ptDiv=document.createElement('div');
   ptDiv.className=`stage-item ${state.posttest_done?'completed':allDone?'':'locked'}`;
@@ -659,7 +760,6 @@ function renderDashboard(){
   if(allDone&&!state.posttest_done)ptDiv.onclick=()=>{renderSurvey('posttest-items',POSTTEST,'post_');showPage('page-posttest')};
   list.appendChild(ptDiv);
 }
-
 // ===== COURSE INTRO / FINAL =====
 function openCourseIntro(){
   currentStage=STAGES.find(s=>s.id===0);
@@ -669,11 +769,12 @@ function openCourseIntro(){
   document.getElementById('fb-prompt').innerHTML='<strong>觀看完課程說明影片後，請點擊下方按鈕確認。</strong>';
   document.getElementById('conclusion-section').style.display='none';
   document.getElementById('chat-section').style.display='none';
-  // Add confirm button
+  document.getElementById('ai-error-box').style.display='none';
+  document.getElementById('draft-banner').style.display='none';
   let btn=document.getElementById('btn-course-confirm');
   if(!btn){btn=document.createElement('button');btn.id='btn-course-confirm';btn.className='btn btn-primary btn-block';btn.style.marginTop='16px';document.querySelector('#page-feedback .card').appendChild(btn)}
   btn.textContent='我已觀看課程說明';btn.style.display='block';
-  btn.onclick=()=>{if(!state.stages)state.stages={};state.stages[0]={time:new Date().toISOString()};saveState();renderDashboard();showPage('page-dashboard')};
+  btn.onclick=()=>{if(!state.stages)state.stages={};state.stages[0]={time:new Date().toISOString()};saveState();document.getElementById('fb-video').src='';renderDashboard();showPage('page-dashboard')};
   showPage('page-feedback');
 }
 function openFinalReport(){
@@ -684,14 +785,16 @@ function openFinalReport(){
   document.getElementById('fb-prompt').innerHTML='<strong>觀看完影片後，請點擊下方按鈕確認。</strong>';
   document.getElementById('conclusion-section').style.display='none';
   document.getElementById('chat-section').style.display='none';
+  document.getElementById('ai-error-box').style.display='none';
+  document.getElementById('draft-banner').style.display='none';
   let btn=document.getElementById('btn-course-confirm');
   if(!btn){btn=document.createElement('button');btn.id='btn-course-confirm';btn.className='btn btn-primary btn-block';btn.style.marginTop='16px';document.querySelector('#page-feedback .card').appendChild(btn)}
   btn.textContent='我已觀看期末報告說明';btn.style.display='block';
-  btn.onclick=()=>{if(!state.stages)state.stages={};state.stages[6]={time:new Date().toISOString()};saveState();renderDashboard();showPage('page-dashboard')};
+  btn.onclick=()=>{if(!state.stages)state.stages={};state.stages[6]={time:new Date().toISOString()};saveState();document.getElementById('fb-video').src='';renderDashboard();showPage('page-dashboard')};
   showPage('page-feedback');
 }
 
-// ===== FEEDBACK (stages 1-5) =====
+// ===== FEEDBACK =====
 function openFeedback(stageId){
   if(state.stages&&state.stages[stageId])return;
   currentStage=STAGES.find(s=>s.id===stageId);
@@ -699,17 +802,56 @@ function openFeedback(stageId){
   document.getElementById('fb-video').src=`https://www.youtube.com/embed/${currentStage.video}?rel=0`;
   document.getElementById('fb-video-section').style.display='block';
   document.getElementById('fb-prompt').innerHTML=`<strong>統一提問指令：</strong><br>「${currentStage.prompt}」`;
-  // Show conclusion, hide chat
-  document.getElementById('conclusion-section').style.display='block';
-  document.getElementById('chat-section').style.display='none';
-  document.getElementById('fb-conclusion').value='';
-  document.getElementById('fb-conclusion').classList.remove('error','conclusion-locked');
-  document.getElementById('fb-conclusion').disabled=false;
-  document.getElementById('btn-preview').style.display='block';
-  document.getElementById('conclusion-preview').style.display='none';
-  // Hide course confirm btn
   const ccBtn=document.getElementById('btn-course-confirm');if(ccBtn)ccBtn.style.display='none';
-  currentAIResponses=[];
+
+  const draft=loadDraft(stageId);
+  if(draft&&draft.aiResponses&&draft.aiResponses.length){
+    document.getElementById('draft-banner').style.display='flex';
+    document.getElementById('conclusion-section').style.display='block';
+    document.getElementById('fb-conclusion').value=draft.conclusion||'';
+    document.getElementById('fb-conclusion').disabled=true;
+    document.getElementById('fb-conclusion').classList.add('conclusion-locked');
+    document.getElementById('btn-preview').style.display='none';
+    document.getElementById('conclusion-preview').style.display='none';
+    document.getElementById('ai-error-box').style.display='none';
+    currentAIResponses=draft.aiResponses.map(r=>({persona:PERSONAS.find(p=>p.name===r.persona_name)||PERSONAS[0],text:r.text}));
+    document.getElementById('chat-section').style.display='block';
+    renderChatMembers();
+    renderChatFromDraft(draft);
+  }else if(draft&&draft.conclusion){
+    document.getElementById('draft-banner').style.display='flex';
+    document.getElementById('conclusion-section').style.display='block';
+    document.getElementById('chat-section').style.display='none';
+    document.getElementById('ai-error-box').style.display='none';
+    document.getElementById('fb-conclusion').value=draft.conclusion;
+    document.getElementById('fb-conclusion').classList.remove('error','conclusion-locked');
+    document.getElementById('fb-conclusion').disabled=false;
+    document.getElementById('btn-preview').style.display='block';
+    document.getElementById('conclusion-preview').style.display='none';
+    currentAIResponses=[];
+  }else{
+    document.getElementById('draft-banner').style.display='none';
+    document.getElementById('conclusion-section').style.display='block';
+    document.getElementById('chat-section').style.display='none';
+    document.getElementById('ai-error-box').style.display='none';
+    document.getElementById('fb-conclusion').value='';
+    document.getElementById('fb-conclusion').classList.remove('error','conclusion-locked');
+    document.getElementById('fb-conclusion').disabled=false;
+    document.getElementById('btn-preview').style.display='block';
+    document.getElementById('conclusion-preview').style.display='none';
+    currentAIResponses=[];
+  }
+
+  document.getElementById('fb-conclusion').oninput=function(){
+    if(this.disabled)return;
+    const txt=this.value.trim();
+    if(txt){
+      const d=loadDraft(stageId)||{};
+      d.conclusion=txt;
+      saveDraft(stageId,d);
+    }
+  };
+
   showPage('page-feedback');
 }
 
@@ -724,24 +866,19 @@ function editConclusion(){
   document.getElementById('conclusion-preview').style.display='none';
   document.getElementById('btn-preview').style.display='block';
 }
-
 function sendToAI(){
   const conclusion=document.getElementById('fb-conclusion').value.trim();
   document.getElementById('fb-conclusion').disabled=true;
   document.getElementById('fb-conclusion').classList.add('conclusion-locked');
   document.getElementById('conclusion-preview').style.display='none';
   document.getElementById('btn-preview').style.display='none';
+  document.getElementById('ai-error-box').style.display='none';
   document.getElementById('chat-section').style.display='block';
   document.getElementById('feedback-bar').style.display='none';
-  const chatBody=document.getElementById('chat-body');
-  chatBody.innerHTML='<div style="text-align:center;padding:20px;color:var(--gray-500)">購物智囊團正在討論你的結論，請稍候...</div>';
 
-  // Render member intro grid
-  const grid=document.getElementById('chat-members-grid');
-  grid.innerHTML='';
-  PERSONAS.forEach(p=>{
-    grid.innerHTML+=`<div class="chat-member"><div class="chat-member-avatar" style="background:${p.color}">${p.emoji}</div><div class="chat-member-name">${p.name}</div><div class="chat-member-style">${p.style}</div></div>`;
-  });
+  renderChatMembers();
+  const chatBody=document.getElementById('chat-body');
+  chatBody.innerHTML='<div style="text-align:center;padding:30px 20px;color:var(--gray-500)"><div style="font-size:28px;margin-bottom:8px">🛒</div>購物智囊團正在討論你的結論，請稍候約 20 秒...</div>';
 
   const stageInfo=currentStage;
   const personaDesc=PERSONAS.map(p=>`${p.name}（${p.style}）：${p.desc}`).join('\n');
@@ -769,75 +906,69 @@ ${personaDesc}
 
   const userMsg=`我們小組的結論是：「${conclusion}」\n\n這是「${stageInfo.title}」階段的任務。請 8 位成員各給出 2 則回饋。`;
 
-  // Call Claude API via Apps Script proxy
   fetch(SHEET_URL,{
     method:'POST',
-    mode:'no-cors',
-    headers:{'Content-Type':'text/plain'},
-    body:JSON.stringify({
+    body:new URLSearchParams({data:JSON.stringify({
       type:'ai_request',
       systemPrompt:systemPrompt,
       userMessage:userMsg
-    })
+    })})
   })
   .then(r=>r.text())
   .then(raw=>{
-    // no-cors returns opaque, try form-based approach instead
-    throw new Error('use_form');
+    var data;
+    try{data=JSON.parse(raw)}
+    catch(e){throw new Error('伺服器回應格式錯誤')}
+
+    if(data.status==='ok'&&data.ai_response){
+      var jsonMatch=data.ai_response.match(/\[[\s\S]*\]/);
+      if(!jsonMatch)throw new Error('AI 回覆格式無法解析');
+      var responses;
+      try{responses=JSON.parse(jsonMatch[0])}
+      catch(e){throw new Error('AI 回覆 JSON 解析失敗')}
+      if(!responses||!responses.length)throw new Error('AI 回覆內容為空');
+
+      var mapped=responses.map(function(r){
+        var persona=PERSONAS.find(function(p){return p.name===r.persona})||PERSONAS[0];
+        return {persona:persona,text:r.text};
+      });
+
+      saveDraft(currentStage.id,{
+        conclusion:conclusion,
+        aiResponses:mapped.map(r=>({persona_name:r.persona.name,text:r.text})),
+        selections:{}
+      });
+
+      showSyncStatus('✓ AI 回覆成功','ok');
+      displayAIResponses(mapped);
+    }else{
+      throw new Error(data.message||'AI 回覆失敗');
+    }
   })
   .catch(err=>{
-    // Use form + iframe approach for Apps Script
-    var reqId='ai_'+Date.now();
-    var iframe=document.createElement('iframe');
-    iframe.name=reqId;iframe.style.display='none';
-    document.body.appendChild(iframe);
+    console.error('AI error:',err);
+    document.getElementById('chat-section').style.display='none';
+    document.getElementById('ai-error-box').style.display='block';
+    document.getElementById('ai-err-detail').textContent='錯誤：'+err.message+'。請檢查網路連線後按下方按鈕重試。';
+    showSyncStatus('⚠ AI 連線失敗，請重試','fail');
+  });
+}
 
-    // For AI request, we need the response, so use a different approach
-    // Post via fetch with redirect
-    var formData=new FormData();
-    formData.append('data',JSON.stringify({
-      type:'ai_request',
-      systemPrompt:systemPrompt,
-      userMessage:userMsg
-    }));
+function retryAI(){
+  document.getElementById('ai-error-box').style.display='none';
+  document.getElementById('fb-conclusion').disabled=false;
+  document.getElementById('fb-conclusion').classList.remove('conclusion-locked');
+  document.getElementById('conclusion-preview').style.display='block';
+  document.getElementById('btn-preview').style.display='none';
+  const text=document.getElementById('fb-conclusion').value.trim();
+  document.getElementById('preview-text').textContent=text;
+}
 
-    fetch(SHEET_URL,{
-      method:'POST',
-      body:new URLSearchParams({data:JSON.stringify({
-        type:'ai_request',
-        systemPrompt:systemPrompt,
-        userMessage:userMsg
-      })})
-    })
-    .then(r=>r.text())
-    .then(raw=>{
-      try{
-        var data=JSON.parse(raw);
-        if(data.status==='ok'&&data.ai_response){
-          var jsonMatch=data.ai_response.match(/\[[\s\S]*\]/);
-          if(!jsonMatch)throw new Error('無法解析 AI 回覆');
-          var responses=JSON.parse(jsonMatch[0]);
-          var mapped=responses.map(function(r){
-            var persona=PERSONAS.find(function(p){return p.name===r.persona})||PERSONAS[0];
-            return {persona:persona,text:r.text};
-          });
-          showSyncStatus('✓ AI 回覆成功','ok');
-          displayAIResponses(mapped);
-        }else{
-          throw new Error(data.message||'AI 回覆失敗');
-        }
-      }catch(e){throw e}
-    })
-    .catch(err2=>{
-      console.error('AI error:',err2);
-      var mockResponses=PERSONAS.flatMap(p=>[
-        {persona:p,text:`從${p.style}的角度來看，你們的結論「${conclusion.substring(0,20)}...」有它的道理。我覺得判斷方向是對的，值得繼續深入探索。`},
-        {persona:p,text:`不過身為${p.style}，我會比較擔心這個選擇可能忽略了一些重要的面向，建議你們再從其他角度想想看。`},
-      ]);
-      displayAIResponses(mockResponses);
-      showSyncStatus('⚠ AI：'+err2.message,'fail');
-    });
-    iframe.remove();
+function renderChatMembers(){
+  const grid=document.getElementById('chat-members-grid');
+  grid.innerHTML='';
+  PERSONAS.forEach(p=>{
+    grid.innerHTML+=`<div class="chat-member"><div class="chat-member-avatar" style="background:${p.color}">${p.emoji}</div><div class="chat-member-name">${p.name}</div><div class="chat-member-style">${p.style}</div></div>`;
   });
 }
 
@@ -856,7 +987,7 @@ function displayAIResponses(responses){
         <div style="flex:1">
           <div class="chat-name" style="color:${resp.persona.color}">${resp.persona.name}</div>
           <div class="chat-bubble" style="background:#fff;border:1.5px solid ${resp.persona.color}30" data-idx="${i}">
-            <div class="chat-text">${resp.text}</div>
+            <div class="chat-text">${escapeHtml(resp.text)}</div>
             <div class="bubble-mark" id="bm-${i}">
               <button class="bubble-mark-btn bm-pos" onclick="markBubble(${i},'pos')">👍 正面</button>
               <button class="bubble-mark-btn bm-neg" onclick="markBubble(${i},'neg')">👎 反面</button>
@@ -878,6 +1009,35 @@ function displayAIResponses(responses){
   });
 }
 
+function renderChatFromDraft(draft){
+  const chatBody=document.getElementById('chat-body');
+  chatBody.innerHTML='';
+  const responses=currentAIResponses;
+  const sels=draft.selections||{};
+
+  responses.forEach((resp,i)=>{
+    const sel=sels[i]||'';
+    const msg=document.createElement('div');msg.className='chat-msg';msg.dataset.idx=i;msg.dataset.sel=sel;
+    msg.innerHTML=`
+      <div class="chat-avatar" style="background:${resp.persona.color}">${resp.persona.emoji}</div>
+      <div style="flex:1">
+        <div class="chat-name" style="color:${resp.persona.color}">${resp.persona.name}</div>
+        <div class="chat-bubble ${sel==='pos'?'marked-pos':sel==='neg'?'marked-neg':''}" style="background:#fff;border:1.5px solid ${resp.persona.color}30" data-idx="${i}">
+          <div class="chat-text">${escapeHtml(resp.text)}</div>
+          <div class="bubble-mark" id="bm-${i}" style="display:block">
+            <button class="bubble-mark-btn bm-pos ${sel==='pos'?'active':''}" onclick="markBubble(${i},'pos')">👍 正面</button>
+            <button class="bubble-mark-btn bm-neg ${sel==='neg'?'active':''}" onclick="markBubble(${i},'neg')">👎 反面</button>
+            <button class="bubble-mark-btn bm-clear" onclick="markBubble(${i},'clear')" style="${sel?'display:inline-block':'display:none'}">✕ 取消</button>
+          </div>
+        </div>
+      </div>`;
+    chatBody.appendChild(msg);
+  });
+
+  document.getElementById('chat-instruction').style.display='block';
+  document.getElementById('feedback-bar').style.display='block';
+  updateFeedbackCounter();
+}
 function markBubble(idx,type){
   const msg=document.querySelector(`.chat-msg[data-idx="${idx}"]`);
   const bubble=msg.querySelector('.chat-bubble');
@@ -910,6 +1070,19 @@ function markBubble(idx,type){
     msg.querySelector('.bm-clear').style.display='inline-block';
   }
   updateFeedbackCounter();
+  saveCurrentDraft();
+}
+
+function saveCurrentDraft(){
+  if(!currentStage||!currentAIResponses.length)return;
+  const conclusion=document.getElementById('fb-conclusion').value.trim();
+  const sels={};
+  document.querySelectorAll('.chat-msg').forEach(m=>{if(m.dataset.sel)sels[m.dataset.idx]=m.dataset.sel});
+  saveDraft(currentStage.id,{
+    conclusion:conclusion,
+    aiResponses:currentAIResponses.map(r=>({persona_name:r.persona.name,text:r.text})),
+    selections:sels
+  });
 }
 
 function updateFeedbackCounter(){
@@ -934,7 +1107,9 @@ function handleFeedback(){
     ai_responses:currentAIResponses.map(r=>({persona:r.persona.name,style:r.persona.style,text:r.text})),
     time:new Date().toISOString()
   };
-  saveState();sendToSheet({type:'feedback',studentId:state.studentId,stage:currentStage.id,data:state.stages[currentStage.id]});
+  saveState();
+  sendToSheet({type:'feedback',studentId:state.studentId,stage:currentStage.id,data:state.stages[currentStage.id]});
+  clearDraft(currentStage.id);
   document.getElementById('fb-video').src='';
   renderDashboard();showPage('page-dashboard');
 }
@@ -944,21 +1119,47 @@ function openHistory(stageId){
   const s=STAGES.find(st=>st.id===stageId);
   const data=state.stages[stageId];if(!data)return;
   document.getElementById('hist-title').textContent=s.title+'：回饋紀錄';
-  document.getElementById('hist-conclusion').innerHTML=`<div style="font-weight:700;color:var(--c1);margin-bottom:6px">📌 小組結論</div><div>${data.conclusion||''}</div>`;
-  // Show AI responses
-  const chatHtml=(data.ai_responses||[]).map(r=>`<div style="display:flex;gap:8px;margin-bottom:8px"><div style="width:28px;height:28px;border-radius:50%;background:var(--c4);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;flex-shrink:0">💬</div><div><div style="font-size:11px;font-weight:700;color:var(--gray-500)">${r.persona}（${r.style}）</div><div style="font-size:14px">${r.text}</div></div></div>`).join('');
+  document.getElementById('hist-conclusion').innerHTML=`<div style="font-weight:700;color:var(--c1);margin-bottom:6px">📌 小組結論</div><div>${escapeHtml(data.conclusion||'')}</div>`;
+  const chatHtml=(data.ai_responses||[]).map(r=>`<div style="display:flex;gap:8px;margin-bottom:8px"><div style="width:28px;height:28px;border-radius:50%;background:var(--c4);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;flex-shrink:0">💬</div><div><div style="font-size:11px;font-weight:700;color:var(--gray-500)">${escapeHtml(r.persona)}（${escapeHtml(r.style||'')}）</div><div style="font-size:14px">${escapeHtml(r.text)}</div></div></div>`).join('');
   document.getElementById('hist-chat').innerHTML=chatHtml?`<div style="font-weight:700;color:var(--c1);margin-bottom:8px">🛒 購物智囊團回覆</div>${chatHtml}`:'';
-  // Show selected
-  const selHtml=`<div style="font-weight:700;color:var(--c1);margin-bottom:8px">你的選擇</div><div style="margin-bottom:8px"><strong>👍 正面：</strong>${(data.positive||[]).map((t,i)=>`<div style="padding:4px 0;font-size:14px">${i+1}. ${t}</div>`).join('')}</div><div><strong>👎 反面：</strong>${(data.negative||[]).map((t,i)=>`<div style="padding:4px 0;font-size:14px">${i+1}. ${t}</div>`).join('')}</div>`;
+  const selHtml=`<div style="font-weight:700;color:var(--c1);margin-bottom:8px">你的選擇</div><div style="margin-bottom:8px"><strong>👍 正面：</strong>${(data.positive||[]).map((t,i)=>`<div style="padding:4px 0;font-size:14px">${i+1}. ${escapeHtml(t)}</div>`).join('')}</div><div><strong>👎 反面：</strong>${(data.negative||[]).map((t,i)=>`<div style="padding:4px 0;font-size:14px">${i+1}. ${escapeHtml(t)}</div>`).join('')}</div>`;
   document.getElementById('hist-selected').innerHTML=selHtml;
   showPage('page-history');
 }
 
-// ===== INIT =====
+// ===== INIT / LOGOUT =====
 let _tapCount=0,_tapTimer=null;
-function secretReset(){_tapCount++;if(_tapTimer)clearTimeout(_tapTimer);_tapTimer=setTimeout(()=>{_tapCount=0},2000);if(_tapCount>=5){if(confirm("確定要清除所有測試資料嗎？")){localStorage.removeItem("socialai_exp_c_v1");_tapCount=0;alert("資料已清除");location.reload()}}}
+function secretReset(){
+  _tapCount++;
+  if(_tapTimer)clearTimeout(_tapTimer);
+  _tapTimer=setTimeout(()=>{_tapCount=0},2000);
+  if(_tapCount>=5){
+    if(confirm("確定要清除所有測試資料嗎？這會清除這支裝置上所有進度（包括 draft）。")){
+      localStorage.removeItem("socialai_exp_c_v1");
+      for(let i=1;i<=5;i++)localStorage.removeItem('socialai_c_draft_s'+i);
+      _tapCount=0;
+      alert("資料已清除");
+      location.reload();
+    }
+  }
+}
+
+function handleLogout(){
+  document.getElementById('fb-video').src='';
+  showPage('page-login');
+  document.getElementById('login-id1').value='';
+  document.getElementById('login-id2').value='';
+  document.getElementById('login-id2-group').style.display='none';
+  document.getElementById('login-error').classList.remove('show');
+  document.getElementById('login-card').style.display='block';
+  document.getElementById('login-loading-card').style.display='none';
+  document.getElementById('login-error-card').style.display='none';
+  loginStep=1;
+  pendingLoginId='';
+}
+
 loadState();
-function handleLogout(){document.getElementById('fb-video').src='';showPage('page-login');document.getElementById('login-id1').value='';document.getElementById('login-id2').value='';document.getElementById('login-id2-group').style.display='none';document.getElementById('login-error').classList.remove('show');loginStep=1}
 </script>
+
 </body>
 </html>
